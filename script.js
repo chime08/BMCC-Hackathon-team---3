@@ -1,17 +1,21 @@
+// Grab elements
 const chatDiv = document.getElementById('chat');
 const form = document.getElementById('form');
 const promptInput = document.getElementById('prompt');
 
+// Function to display messages
 function addMessage(text, who = 'ai') {
   const msgDiv = document.createElement('div');
   msgDiv.className = `message ${who}`;
 
+  // timestamp
   const meta = document.createElement('div');
   meta.className = 'meta';
   const now = new Date();
   meta.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   msgDiv.appendChild(meta);
 
+  // content
   const content = document.createElement('div');
   content.className = 'content';
   content.textContent = text;
@@ -22,37 +26,56 @@ function addMessage(text, who = 'ai') {
   return msgDiv;
 }
 
-// Example API call placeholder (replace URL or logic with your real endpoint)
+// 🌐 Connect directly to OpenAI API
 async function askBackend(prompt) {
-  try {
-    // For now, simulate AI with a fake math reply
-    const simulatedReply = `Let's solve that step by step... (this is where the AI's reply will appear).`;
-    await new Promise(r => setTimeout(r, 800)); // small delay for realism
-    return simulatedReply;
+  const apiKey = "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"; // ⚠️ paste your OpenAI API key here
 
-    /* 
-    To connect a real API later:
-    const resp = await fetch('YOUR_BACKEND_URL/api/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini", // small, affordable, good reasoning
+        messages: [
+          {
+            role: "system",
+            content: "You are a friendly math tutor. Solve the user's math problem step by step. If it involves equations, format them in LaTeX using \\( ... \\) or $$ ... $$ for display math."
+          },
+          { role: "user", content: prompt }
+        ],
+      }),
     });
-    const data = await resp.json();
-    return data.reply || "Sorry, no response.";
-    */
+
+    const data = await response.json();
+
+    if (!data.choices || !data.choices.length) {
+      console.error("Unexpected API response:", data);
+      return "Sorry, I couldn’t get an answer. Please try again.";
+    }
+
+    return data.choices[0].message.content.trim();
+
   } catch (err) {
+    console.error(err);
     return `Error: ${err.message}`;
   }
 }
 
-// Render math expressions if found
+// 🧮 Render math using KaTeX
 function renderMath(msgDiv) {
   const contentDiv = msgDiv.querySelector('.content');
+  const text = contentDiv.textContent;
   try {
-    katex.render(contentDiv.textContent, contentDiv, { throwOnError: false, displayMode: true });
-  } catch {}
+    katex.render(text, contentDiv, { throwOnError: false, displayMode: false });
+  } catch {
+    // if KaTeX fails, just show plain text
+  }
 }
 
+// 🗨️ Handle chat submission
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const prompt = promptInput.value.trim();
@@ -67,5 +90,5 @@ form.addEventListener('submit', async (e) => {
   renderMath(thinking);
 });
 
-// Greeting
-addMessage('🍂 Welcome! Ask me a calculus question like "differentiate x² sin(x)" or "integrate x³ from 0 to 1".', 'ai');
+// 👋 Welcome message
+addMessage('🍂 Welcome to Fall Into Calculus! Ask me any math question — try “Differentiate x² sin(x)” or “3 - 2.”', 'ai');
