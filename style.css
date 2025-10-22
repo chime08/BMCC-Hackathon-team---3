@@ -1,0 +1,124 @@
+/* Fall-themed AI Math Tutor */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at top, #f8ede3, #d7bfae);
+  color: #3e2723;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff8f0;
+  border: 2px solid #c08a53;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Subtle math symbols in the background */
+.container::before {
+  content: "∫ ∑ π Δ θ √";
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  font-size: 4rem;
+  color: rgba(192, 138, 83, 0.08);
+  pointer-events: none;
+}
+
+header {
+  padding: 16px;
+  text-align: center;
+  background: linear-gradient(90deg, #d69e6f, #b86b36);
+  color: #fff;
+  border-bottom: 2px solid #a85d2d;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+.chat {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  position: relative;
+  word-wrap: break-word;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #f1d2b6;
+  border: 1px solid #d79e65;
+}
+
+.message.ai {
+  align-self: flex-start;
+  background: #fbe7d1;
+  border: 1px solid #d2a679;
+}
+
+.message .meta {
+  font-size: 0.8rem;
+  color: #7b5e45;
+  margin-bottom: 4px;
+}
+
+.input-area {
+  display: flex;
+  padding: 12px;
+  border-top: 2px solid #d2a679;
+  background: #f2d9c4;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #b77d43;
+  background: #fff;
+  color: #4e342e;
+  font-size: 1rem;
+  outline: none;
+}
+
+.input-area button {
+  margin-left: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #b86b36;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.input-area button:hover {
+  background: #a85d2d;
+}
